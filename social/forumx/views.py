@@ -1,10 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Profile
+from .models import Profile, Thread
 
 # Create your views here.
 def home(request):
-    return render(request,'home.html',{})
+    if request.user.is_authenticated:
+        threads = Thread.objects.all().order_by("-created_at")
+    return render(request,'home.html',{"threads":threads})
+
+def thread_posts(request, thread_id):
+    thread=get_object_or_404(Thread, pk=thread_id)
+    posts=thread.posts.all().order_by("-created_at")
+    return render(request, 'posts.html', {'thread': thread, 'posts': posts})
 
 def profile_list(request):
     # You have to be logged in to see users
