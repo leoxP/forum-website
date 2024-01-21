@@ -1,104 +1,25 @@
-*{
-    box-sizing: border-box;
+/* Override Bootstrap styles for button colors */
+.btn-outline-danger {
+    color: #fff;
+    background-color: #8B0000;
+    border-color: #8B0000;
 }
 
-html{
-    font-size: 20px;
-    font-family: 'Titillium Web', sans-serif;
-    background-color: black;
-    color: white;
-    font-style: italic;
+.btn-outline-success {
+    color: #fff;
+    background-color: #006400;
+    border-color: #006400;
 }
 
-a{
-    color: red;
-    font-weight: bold;
-    text-decoration: none;
+/* Additional styles for your custom classes */
+.btn-follow {
+    color: #fff;
+    background-color: #006400;
+    border-color: #006400;
 }
 
-h1{
-    font-size: 23px;
-    font-weight: bolder;
-}
-
-.container{
-    margin: 20px;
-    padding: 20px;
-}
-
-.subforum{
-    margin-top: 20px;
-}
-
-.subforum-title{
-    background-color: #292B2E;
-    padding: 5px;
-    border-radius: 5px;
-    margin: 4px;
-}
-
-.subforum-description{
-    margin-block: 0;
-}
-
-.subforum-row{
-    display: grid;
-    grid-template-columns: 7% 60% 12% 21%;
-}
-
-.subforum-column{
-    padding: 8px;
-    margin: 4px;
-    border-radius: 5px;
-    background-color: #111314;
-}
-
-.center{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.subforum-icon{
-    font-size: 45px;
-}
-
-
-/* For smartphones */
-@media screen and (max-width: 460){
-    .container{
-        margin: 10px;
-        padding: 10px;
-    }
-
-    .subforum-row{
-        display: grid;
-        grid-template-columns: 25% 75%;
-        grid-template-rows: 65% 35%;
-    }
-}
-
-/* For tablets */
-@media screen and (min-width: 460px) and (max-width: 1080px) {
-    .container{
-        margin: 15px;
-        padding: 15px;
-    }
-
-    .subforum-row{
-        display: grid;
-        grid-template-columns: 10% 60% 10% 20%;
-    }
-
-    .subforum-icon{
-        font-size: 35px;
-    }
-
-    .html{
-        font-size: 15px;
-    }
-
-    .h1{
-        font-size: 18px;
-    }
+.btn-unfollow {
+    color: #fff;
+    background-color: #8B0000;
+    border-color: #8B0000;
 }
