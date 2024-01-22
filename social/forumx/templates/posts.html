@@ -1,11 +1,37 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 {% block content %}
+<style>
+    .bottom-div {
+        position: absolute; /* sets the div to bottom */
+        bottom: 0;
+        left: 0;
+        text-align: left;
+        margin-left: 70px;
+        width: 90%;
+    }
+</style>
 <div class="container">
-    <h2>{{ thread.title }}</h2>
-    <ul>
-        {% for post in posts %}
-            <li>{{ post.user.username }} - {{ post.created_at }}: {{ post.content }}</li>
-        {% endfor %}
-    </ul>
+  <h2>{{ thread.title | title }}</h2>
+  <br />
+  {% for post in posts %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ post.user.username }}</h5>
+      <p class="card-text">{{ post.content }}</p>
+      <p class="card-text">
+        <small class="text-muted">{{ post.created_at }}</small>
+      </p>
+    </div>
+  </div>
+  {% endfor %}
+  {% if form %}
+  <form method=POST>
+    {% csrf_token %}
+    {{ form.content }}
+    <br>
+    <button type="submit" class="btn btn-secondary">POST</button>
+  </form>
+  {% endif %}
+ 
 </div>
 {% endblock %}
