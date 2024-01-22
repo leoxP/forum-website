@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Profile, Thread
+from .models import Profile, Thread, Post
 
 # Create your views here.
 def home(request):
@@ -25,6 +25,7 @@ def profile_list(request):
 def profile(request, pk):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user_id=pk)
+        user_posts = Post.objects.filter(user=profile.user).order_by("-created_at")
         
         # Post Form logic
         if request.method == "POST":
@@ -41,7 +42,7 @@ def profile(request, pk):
             #Profile saved
             current_user_profile.save()
 
-        return render(request, 'profile.html', {"profile":profile})
+        return render(request, 'profile.html', {"profile":profile, "user_posts": user_posts})
     else:
         messages.success(request,("You must be logged in to view profiles"))
         return redirect('home')

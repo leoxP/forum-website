@@ -20,6 +20,10 @@
                             {% endif %}
                         {% endif %}
                     </form>
+                    <br>
+                    {% for post in user_posts %}
+                        <li>{{ post.user.username }} - {{ post.created_at }}: {{ post.content }}</li>
+                    {% endfor %}
                 </div>
                 <div class="col-4">
                     <div class="card">

@@ -12,11 +12,8 @@ class Thread(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     
     def __str__(self):
-        return ( 
-                f"({self.title})"
-                f"({self.created_at: %d-%m-%Y %H:%M}): "
-                f"({self.user})"
-                )
+        return f"{self.title} ({self.created_at:%d-%m-%Y %H:%M}): {self.user}"
+
     
 # Posts on threads
 class Post(models.Model):
