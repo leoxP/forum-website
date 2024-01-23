@@ -11,11 +11,20 @@
             <a class="nav-link" 
             href="{% url 'profile_list' %}" >Profiles</a>
           </li>
-          
+
           {% if user.is_authenticated %} <!-- Link should not exist without own profile-->
             <li class="nav-item">
               <a class="nav-link" 
               href="{% url 'profile' request.user.id %}" >My Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" 
+              href="{% url 'logout' %}" >Logout</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" 
+              href="{% url 'login' %}" >Login</a>
             </li>
           {% endif %}
 
