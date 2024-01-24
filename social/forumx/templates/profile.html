@@ -36,24 +36,14 @@
                         </div>
                     {% endfor %}
                 </div>
+                
                 <div class="col-4">
                     <div class="card">
                         <div class="card-header">
-                          Following
-                        </div>
-                        <div class="card-body">
-                          <p class="card-text">
-                            {% for following in profile.follows.all %}
-                                <a href="{% url 'profile' following.user.id%}"> @{{ following }} </a><br>
-                            {% endfor %}
-                          </p>
-                        </div>
-                    </div>
-                    <br>
-
-                    <div class="card">
-                        <div class="card-header">
-                            Followers
+                            <p class="card-text">
+                                Followers
+                               ({{ profile.followed_by.count }})
+                            </p>
                         </div>
                         <div class="card-body">
                           <p class="card-text">
@@ -63,6 +53,22 @@
                           </p>
                         </div>
                     </div>
+                    <br>
+                    <div class="card">
+                        <div class="card-header">
+                          <p class="card-text">
+                            Following ({{ profile.follows.count }})
+                        </p>
+                        </div>
+                        <div class="card-body">
+                          <p class="card-text">
+                            {% for following in profile.follows.all %}
+                                <a href="{% url 'profile' following.user.id%}"> @{{ following }} </a><br>
+                            {% endfor %}
+                          </p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

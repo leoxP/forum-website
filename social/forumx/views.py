@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Profile, Thread, Post
-from .forms import PostForm
+from .forms import PostForm, SignUpForm
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+
 
 # Create your views here.
 def home(request):
@@ -65,7 +68,7 @@ def profile(request, pk):
     else:
         messages.success(request,("You must be logged in to view profiles"))
         return redirect('home')
-    
+
 def login_user(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -86,3 +89,23 @@ def logout_user(request):
     logout(request)
     messages.success(request,("You have been logged out"))
     return redirect('home')
+
+def register_user(request):
+    form = SignUpForm()
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data['username']
+            password1 = form.cleaned_data['password1']
+            # first_name = form.cleaned_data['first_name']
+            # second_name = form.cleaned_data['second_name']
+            # email = form.cleaned_data['email']
+            
+            # Login User
+            user = authenticate(username=username,password=password1)
+            login(request,user)
+            messages.success(request, ("Successfully Registered. Welcome!"))
+            return redirect('home')
+    
+    return render(request, "register.html", {"form":form})

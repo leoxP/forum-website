@@ -8,4 +8,5 @@ urlpatterns = [
     path('thread/<int:thread_id>/', views.thread_posts, name='thread_posts'),
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
+    path('register/', views.register_user, name='register'),
 ]
