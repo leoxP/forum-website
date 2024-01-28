@@ -11,6 +11,11 @@
             <div class="row">
                 <div class="col-8">
                     <h1>{{ profile.user.username }}'s Profile</h1>
+                    {% if profile == user.profile %}
+                    <a href="{% url 'update_user' %}" class="btn btn-outline-secondary btn-sm">
+                            Update Profile
+                    </a>
+                    {% endif %}
                     <form method="post">
                         {% csrf_token %} <!-- To prevent Cross-Site Request Forgery attacks -->
                         {% if profile != user.profile %}

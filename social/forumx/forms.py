@@ -3,6 +3,7 @@ from .models import Post
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
+from django.contrib.auth.forms import UserChangeForm
 
 class PostForm(forms.ModelForm):
     content = forms.CharField(required=True,
@@ -39,8 +40,6 @@ class SignUpForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs) # Intialization for SignUp Form
 
-        self.error_class = CustomErrorList # Overrides the current error list
-
         self.fields['username'].widget.attrs['class'] = 'form-control'
         self.fields['username'].widget.attrs['placeholder'] = 'User Name'
         self.fields['username'].label = ''
@@ -56,3 +55,14 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirm Password'
         self.fields['password2'].label = ''
         self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
+        
+class CustomUserChangeForm(UserChangeForm):
+    password = None # Remove the password field
+    
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+        
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserChangeForm, self).__init__(*args, **kwargs)

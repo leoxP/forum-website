@@ -6,7 +6,9 @@ from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from .forms import CustomUserChangeForm
 
 # Create your views here.
 def home(request):
@@ -91,21 +93,34 @@ def logout_user(request):
     return redirect('home')
 
 def register_user(request):
-    form = SignUpForm()
-    if request.method == "POST":
-        form = SignUpForm(request.POST)
+	form = SignUpForm()
+	if request.method == "POST":
+		form = SignUpForm(request.POST)
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data['username']
+			password = form.cleaned_data['password1']
+			# first_name = form.cleaned_data['first_name']
+			# second_name = form.cleaned_data['second_name']
+			# email = form.cleaned_data['email']
+			# Log in user
+			user = authenticate(username=username, password=password)
+			login(request,user)
+			messages.success(request, ("You have successfully registered! Welcome!"))
+			return redirect('home')
+	
+	return render(request, "register.html", {'form':form})
+
+
+@login_required
+def update_user(request):
+    current_user = request.user
+    form = CustomUserChangeForm(request.POST or None, instance=current_user)
+
+    if request.method == 'POST':
         if form.is_valid():
             form.save()
-            username = form.cleaned_data['username']
-            password1 = form.cleaned_data['password1']
-            # first_name = form.cleaned_data['first_name']
-            # second_name = form.cleaned_data['second_name']
-            # email = form.cleaned_data['email']
-            
-            # Login User
-            user = authenticate(username=username,password=password1)
-            login(request,user)
-            messages.success(request, ("Successfully Registered. Welcome!"))
+            messages.success(request, "Your profile has been updated")
             return redirect('home')
-    
-    return render(request, "register.html", {"form":form})
+
+    return render(request, "update_user.html", {'form': form})

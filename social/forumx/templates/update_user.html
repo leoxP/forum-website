@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2 class="mb-4">Update Profile</h2>
+    <form method="post" class="needs-validation" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="mb-3">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        <div class="invalid-feedback">
+          {{ form.username.errors }}
+        </div>
+      </div>
+      <div class="mb-3">
+        {{ form.first_name.label_tag }}
+        {{ form.first_name }}
+        <div class="invalid-feedback">
+          {{ form.first_name.errors }}
+        </div>
+      </div>
+      <div class="mb-3">
+        {{ form.last_name.label_tag }}
+        {{ form.last_name }}
+        <div class="invalid-feedback">
+          {{ form.last_name.errors }}
+        </div>
+      </div>
+      <div class="mb-3">
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        <div class="invalid-feedback">
+          {{ form.email.errors }}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+  </div>
+{% endblock %}
