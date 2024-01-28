@@ -40,6 +40,8 @@ class Profile(models.Model):
     )
    
    date_modified = models.DateTimeField(User, default=timezone.now)
+   # Save the location of the profile image
+   profile_image = models.ImageField(null=True, blank=True, upload_to="images/")
    
    def __str__(self):
        return self.user.username
