@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Profile, Thread, Post
-from .forms import PostForm, SignUpForm
+from .forms import PostForm, SignUpForm, ProfilePicForm
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -115,12 +115,16 @@ def register_user(request):
 @login_required
 def update_user(request):
     current_user = request.user
-    form = CustomUserChangeForm(request.POST or None, instance=current_user)
-
+    profile_user = Profile.objects.get(user__id=request.user.id)
+    
+    user_form = CustomUserChangeForm(request.POST or None, request.FILES or None, instance=current_user)
+    profile_form = ProfilePicForm(request.POST or None, request.FILES or None, instance=profile_user)
     if request.method == 'POST':
-        if form.is_valid():
-            form.save()
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            
             messages.success(request, "Your profile has been updated")
             return redirect('home')
 
-    return render(request, "update_user.html", {'form': form})
+    return render(request, "update_user.html", {'user_form': user_form, 'profile_form': profile_form})

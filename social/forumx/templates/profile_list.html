@@ -5,12 +5,26 @@
     <h1> Profiles </h1>
     <br>
 
+    <style>
+        .profile-image {
+            padding:10px;
+            width: 150px; /* Set the desired width */
+            height: 150px; /* Set the desired height */
+            border-radius: 50%; /* Make it a circle */
+            object-fit: cover; /* Ensure the image covers the entire container */
+        }  
+    </style>
+
 {% if profiles %}
     {% for profile in profiles %}
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
           <div class="col-md-4">
-            <img src="{% static 'images/user.jpg' %}" class="img-fluid rounded-start" alt="...">
+            {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" width=200 height=200  class="img-fluid profile-image">
+            {% else %}
+                <img src="{% static 'images/user.jpg' %}" class="img-fluid profile-image" alt="...">
+            {% endif %}
           </div>
           <div class="col-md-8">
             <div class="card-body">

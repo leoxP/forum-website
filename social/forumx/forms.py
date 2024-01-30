@@ -1,9 +1,19 @@
 from django import forms
-from .models import Post
+from .models import Post, Profile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
 from django.contrib.auth.forms import UserChangeForm
+
+# Profile Extras Form
+class ProfilePicForm(forms.ModelForm):
+    profile_image = forms.ImageField(label="Profile Picture")
+    
+    # Designating to save in profile model
+    class Meta:
+        model = Profile
+        fields = ('profile_image',)
+    
 
 class PostForm(forms.ModelForm):
     content = forms.CharField(required=True,

@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
     {% if profile %}
         <style>
@@ -39,20 +41,35 @@
                     </form>
                     <br>
                     {% for post in user_posts %}
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title"><a href="{% url 'thread_posts' post.thread.id %}" class="white-link">{{ post.thread.title | title }}</a></h5>
-                                <p class="card-text">{{ post.content }}</p>
-                                <p class="card-text"><small class="text-muted">{{ post.created_at }}</small></p>
+                    <div class="card mb-3">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 col-sm-2 mt-2">
+                                    {% if profile.profile_image %}
+                                        <img src="{{ profile.profile_image.url }}" alt="Profile Image" height=100 width=100 class="rounded-circle">
+                                    {% else %}
+                                        <img src="{% static 'images/user.jpg' %}" alt="Default Profile Image" height=100 width=100 class="rounded-circle">
+                                    {% endif %}
+                                </div>
+                                <div class="col-12 col-sm-10">
+                                    <div align="left" class="card-body">
+                                        <h5 class="card-title"><a href="{% url 'thread_posts' post.thread.id %}" class="white-link">X/{{ post.thread.title | title }}</a></h5>
+                                        <p class="card-text">{{ post.content }}</p>
+                                        <p class="card-text"><small class="text-muted">{{ post.created_at }}</small></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>                    
                     {% endfor %}
                 </div>
                 
                 <div class="col-4">
 
                     {% if profile.profile_image %}
-                    <img src="{{ profile.profile_image.url }}" class="img-fluid profile-image">
+                    <img src="{{ profile.profile_image.url }}" alt="Profile Image" class="img-fluid profile-image">
+                    {% else %}
+                    <img src="{% static 'images/user.jpg' %}" alt="Default Profile Image" class="img-fluid profile-image">
                     {% endif %}
                     <br>
                     <br>

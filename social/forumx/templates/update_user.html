@@ -1,37 +1,50 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
   <div class="container mt-4">
     <h2 class="mb-4">Update Profile</h2>
-    <form method="post" class="needs-validation" novalidate>
+    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
       {% csrf_token %}
-      {{ form.non_field_errors }}
       <div class="mb-3">
-        {{ form.username.label_tag }}
-        {{ form.username }}
+        <label for="profile-image" class="form-label">Current Profile Picture:</label>
+        <br>
+        {% if profile_form.instance.profile_image %}
+          <img src="{{ profile_form.instance.profile_image.url }}" alt="Current Profile Picture" class="img-thumbnail mb-2" style="max-width: 200px; max-height: 200px;">
+          {% else %}
+          <img src="{% static 'images/user.jpg' %}" alt="Default Profile Image" class="img-fluid profile-image"  style="max-width: 200px; max-height: 200px;">
+        {% endif %}
+        <br><br>
+        <input type="file" name="profile_image" accept="image/*" id="profile-image" class="form-control">
+      </div>
+      {{ profile_form.non_field_errors }}
+
+      <div class="mb-3">
+        {{ user_form.username.label_tag }}
+        {{ user_form.username }}
         <div class="invalid-feedback">
-          {{ form.username.errors }}
+          {{ user_form.username.errors }}
         </div>
       </div>
       <div class="mb-3">
-        {{ form.first_name.label_tag }}
-        {{ form.first_name }}
+        {{ user_form.first_name.label_tag }}
+        {{ user_form.first_name }}
         <div class="invalid-feedback">
-          {{ form.first_name.errors }}
+          {{ user_form.first_name.errors }}
         </div>
       </div>
       <div class="mb-3">
-        {{ form.last_name.label_tag }}
-        {{ form.last_name }}
+        {{ user_form.last_name.label_tag }}
+        {{ user_form.last_name }}
         <div class="invalid-feedback">
-          {{ form.last_name.errors }}
+          {{ user_form.last_name.errors }}
         </div>
       </div>
       <div class="mb-3">
-        {{ form.email.label_tag }}
-        {{ form.email }}
+        {{ user_form.email.label_tag }}
+        {{ user_form.email }}
         <div class="invalid-feedback">
-          {{ form.email.errors }}
+          {{ user_form.email.errors }}
         </div>
       </div>
       <button type="submit" class="btn btn-primary">Update Profile</button>

@@ -33,7 +33,7 @@
   <br>
   {% for thread in threads %}
   <div class="alert alert-light" role="alert">
-    <a href="{% url 'thread_posts' thread.id %}"><strong>{{ thread.title | title }}</strong></a>
+    <a href="{% url 'thread_posts' thread.id %}"><strong>X/{{ thread.title | title }}</strong></a>
     <div class="profile-info">
       <span>created by <a class="profile-link" href="{% url 'profile' thread.user.profile.user.id %}">@{{ thread.user.username }}</a></span>
       <span>{{ thread.created_at }}</span>
