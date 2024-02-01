@@ -128,3 +128,14 @@ def update_user(request):
             return redirect('home')
 
     return render(request, "update_user.html", {'user_form': user_form, 'profile_form': profile_form})
+
+@login_required
+def post_like(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    
+    if post.likes.filter(id=request.user.id):
+        post.likes.remove(request.user) #Unlike
+    else:
+        post.likes.add(request.user)
+        
+    return redirect('thread_posts', thread_id=post.thread.id)

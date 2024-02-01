@@ -25,7 +25,12 @@ class Post(models.Model):
         related_name='posts')
     content = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
+    likes = models.ManyToManyField(User, related_name="post_like", blank=True)
 
+    # Keep count of likes
+    def number_of_likes(self):
+        return self.likes.count()
+    
     def __str__(self):
         return f"{self.user.username} - {self.thread.title} ({self.created_at:%d-%m-%Y %H:%M}): {self.content}"
 
