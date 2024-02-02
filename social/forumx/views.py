@@ -138,4 +138,4 @@ def post_like(request, pk):
     else:
         post.likes.add(request.user)
         
-    return redirect('thread_posts', thread_id=post.thread.id)
+    return redirect(request.META.get("HTTP_REFERER"))
