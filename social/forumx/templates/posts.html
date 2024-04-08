@@ -25,7 +25,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 col-sm-2 mb-3 mb-sm-0 text-center">
-                    {% if post.user.profile.profile_image%}
+                    {% if post.user.profile.profile_image %}
                         <img src="{{ post.user.profile.profile_image.url }}" class="rounded-circle" height=100 width=100 class="rounded-circle">
                     {% else %}
                         <img src="{% static 'images/user.jpg' %}" alt="Default Profile Image" height=100 width=100 class="rounded-circle">
