@@ -9,6 +9,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserChangeForm
+from django.contrib.auth import update_session_auth_hash
+
 
 # Create your views here.
 def home(request):
@@ -117,17 +119,43 @@ def update_user(request):
     current_user = request.user
     profile_user = Profile.objects.get(user__id=request.user.id)
     
-    user_form = CustomUserChangeForm(request.POST or None, request.FILES or None, instance=current_user)
+    user_form = CustomUserChangeForm(request.POST or None, instance=current_user)
     profile_form = ProfilePicForm(request.POST or None, request.FILES or None, instance=profile_user)
+    
     if request.method == 'POST':
+        old_password = request.POST.get('old_password')
+        new_password1 = request.POST.get('new_password1')
+        new_password2 = request.POST.get('new_password2')
+
+        if old_password and new_password1 and new_password2:
+            if current_user.check_password(old_password) and new_password1 == new_password2:
+                current_user.set_password(new_password1)
+                current_user.save()
+                update_session_auth_hash(request, current_user)  # Update the session with the new password
+                messages.success(request, "Password updated successfully")
+            else:
+                messages.error(request, "Failed to update password. Make sure the old password is correct and new passwords match.")
+                return redirect('update_user')
+
         if user_form.is_valid() and profile_form.is_valid():
+            # Save user details
             user_form.save()
+
+            # Save profile details
             profile_form.save()
-            
+
+            # Additional fields
+            profile_bio = request.POST.get('profile_bio')
+
+            # Update profile bio
+            profile_user.profile_bio = profile_bio
+            profile_user.save()
+            update_session_auth_hash(request, current_user) 
             messages.success(request, "Your profile has been updated")
             return redirect('home')
 
     return render(request, "update_user.html", {'user_form': user_form, 'profile_form': profile_form})
+
 
 @login_required
 def post_like(request, pk):
@@ -139,3 +167,22 @@ def post_like(request, pk):
         post.likes.add(request.user)
         
     return redirect(request.META.get("HTTP_REFERER"))
+
+def post_show(request,pk):
+    post = get_object_or_404(Post, id=pk)
+    if post:
+        return render(request, "show_post.html", {'post':post})
+    else:
+        messages.success(request, "That post does not exist...")
+        return redirect('home')
+    
+def search_user(request):
+	if request.method == "POST":
+		# Grab the form field input
+		search = request.POST['search']
+		# Search the database
+		searched = User.objects.filter(username__contains = search)
+
+		return render(request, 'search_user.html', {'search':search, 'searched':searched})
+	else:
+		return render(request, 'search_user.html', {})

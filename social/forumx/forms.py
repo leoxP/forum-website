@@ -8,6 +8,7 @@ from django.contrib.auth.forms import UserChangeForm
 # Profile Extras Form
 class ProfilePicForm(forms.ModelForm):
     profile_image = forms.ImageField(label="Profile Picture")
+    profile_bio= forms.CharField(label="Profile Bio",widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Profile Bio'}))
     
     # Designating to save in profile model
     class Meta:
@@ -67,12 +68,37 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
         
 class CustomUserChangeForm(UserChangeForm):
-    password = None # Remove the password field
-    
+    profile_bio = forms.CharField(label="Profile Bio", widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Profile Bio'}), required=False)
+    old_password = forms.CharField(label="Old Password", widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Old Password'}), required=False)
+    new_password1 = forms.CharField(label="New Password", widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'New Password'}), required=False)
+    new_password2 = forms.CharField(label="Confirm New Password", widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm New Password'}), required=False)
+
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
-        
 
     def __init__(self, *args, **kwargs):
         super(CustomUserChangeForm, self).__init__(*args, **kwargs)
+        self.fields['profile_bio'].initial = self.instance.profile.profile_bio if hasattr(self.instance, 'profile') else ''
+        
+    def clean(self):
+        cleaned_data = super().clean()
+        old_password = cleaned_data.get("old_password")
+        new_password1 = cleaned_data.get("new_password1")
+        new_password2 = cleaned_data.get("new_password2")
+        if new_password1 and new_password2 and new_password1 != new_password2:
+            self.add_error('new_password2', "The two password fields didn't match.")
+        return cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        profile = user.profile if hasattr(user, 'profile') else None
+        if profile:
+            profile.profile_bio = self.cleaned_data.get('profile_bio')
+        if self.cleaned_data.get('new_password1'):
+            user.set_password(self.cleaned_data.get('new_password1'))
+        if commit:
+            user.save()
+            if profile:
+                profile.save()
+        return user

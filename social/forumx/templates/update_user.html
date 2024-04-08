@@ -46,6 +46,23 @@
         <div class="invalid-feedback">
           {{ user_form.email.errors }}
         </div>
+        <br><br>
+        <div class="mb-3">
+          {{ user_form.profile_bio.label_tag }}
+          {{ user_form.profile_bio }}
+        </div>
+        <div class="mb-3">
+          {{ user_form.old_password.label_tag }}
+          {{ user_form.old_password }}
+        </div>
+        <div class="mb-3">
+          {{ user_form.new_password1.label_tag }}
+          {{ user_form.new_password1 }}
+        </div>
+        <div class="mb-3">
+          {{ user_form.new_password2.label_tag }}
+          {{ user_form.new_password2 }}
+        </div>
       </div>
       <button type="submit" class="btn btn-primary">Update Profile</button>
     </form>
